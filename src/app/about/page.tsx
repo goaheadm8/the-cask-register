@@ -1,6 +1,8 @@
-import Navbar from "@/app/components/Navbar";
-import Footer from "@/app/components/Footer";
-import OverlayLayout from "@/app/components/OverlayLayout";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import OverlayLayout from "../components/OverlayLayout";
+import AboutFlowDiagram from "../components/AboutFlowDiagram"
+import React from "react";
 
 export default function AboutPage() {
   return (
@@ -17,6 +19,7 @@ export default function AboutPage() {
         <p>
           Based in Scotland and proud to support the industry’s heritage, our mission is to help you protect your liquid investment.
         </p>
+        <AboutFlowDiagram />
       </OverlayLayout>
       <Footer />
     </>

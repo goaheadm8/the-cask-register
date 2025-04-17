@@ -30,64 +30,30 @@ export default function Home() {
     <>
       <Navbar />
       <main className="bg-[#f8f3e9] text-[#2f1b0c] font-sans">
-        {/* Waitlist Section */}
-        <section className="bg-[#2f1b0c] text-white px-6 py-10 text-center">
-          <h2 className="text-3xl font-serif font-bold mb-4">Join the Waitlist</h2>
-          <p className="mb-4">Be part of the movement bringing transparency to whisky cask ownership.</p>
 
-          {waitlistCount !== null && (
-            <p className="text-base text-[#fcefdc] mb-4 animate-count">
-              <strong className="text-2xl font-semibold">{waitlistCount + 143}</strong> people have already joined the waitlist!
-            </p>
-          )}
-
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const form = e.currentTarget;
-              const email = form.email.value;
-
-              const { data, error } = await supabase.from("Waitlist").insert([{ email }]);
-
-              if (error) {
-                alert("Something went wrong. Please try again.");
-              } else {
-                alert("You're on the waitlist!");
-                form.reset();
-                const { count } = await supabase
-                  .from("Waitlist")
-                  .select("*", { count: "exact", head: true });
-                setWaitlistCount(count || null);
-              }
-            }}
-            className="flex flex-col md:flex-row justify-center items-center gap-3 max-w-lg mx-auto"
-          >
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="you@example.com"
-              className="p-3 w-full rounded text-black"
-            />
-            <button
-              type="submit"
-              className="bg-white text-[#2f1b0c] px-6 py-3 rounded hover:bg-[#f0e8dc] font-semibold"
-            >
-              Join Now
-            </button>
-          </form>
-        </section>
-
-        {/* Hero Section */}
-        <section className="text-center px-6 py-20 bg-white">
-          <h1 className="text-5xl font-bold font-serif mb-6">Bringing Integrity to Whisky Cask Investment</h1>
-          <p className="text-lg max-w-2xl mx-auto mb-8">
-            The Cask Registry is not just another whisky broker. We exist to bring clarity, accountability, and regulation to an opaque industry — providing third-party, independent pricing and guidance for whisky cask investors.
-          </p>
-          <Link href="/register" className="bg-[#2f1b0c] text-white px-6 py-3 rounded-lg hover:bg-[#442c1c] transition">
-            Register a Cask
-          </Link>
-        </section>
+        {/* Hero Section  with Background Image*/}
+        <section
+  className="relative bg-cover bg-center text-white text-center py-24"
+  style={{
+    backgroundImage: "url('/images/Tech and Whisky.webp')",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+  }}
+>
+  <div className="bg-black/60 absolute inset-0 z-0" />
+  <div className="relative z-10 px-6">
+    <h1 className="text-5xl font-serif font-bold mb-6">Bringing Integrity to Whisky Cask Investment</h1>
+    <p className="text-lg max-w-2xl mx-auto mb-8">
+      The Cask Registry brings clarity, accountability, and regulation to an opaque industry — providing third-party, independent pricing and guidance for whisky cask investors.
+    </p>
+    <Link
+      href="/register"
+      className="bg-white text-[#2f1b0c] px-6 py-3 rounded-lg font-semibold hover:bg-[#f0e8dc]"
+    >
+      Verify a Cask
+    </Link>
+  </div>
+</section>
 
         {/* Registry Steps */}
         <section className="py-16 bg-[#f0e8dc]">
@@ -115,26 +81,26 @@ export default function Home() {
 
         {/* Benefits Section */}
         <section className="bg-white py-20 px-6 text-center">
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-2">Grow Your Knowledge and Returns</p>
-          <h2 className="text-4xl font-serif font-bold mb-12">Your Whisky Investment Partner</h2>
+          <p className="text-sm uppercase tracking-widest text-gray-500 mb-2">Grow Your Returns</p>
+          <h2 className="text-4xl font-serif font-bold mb-12">Your Independent Whisky Partner</h2>
 
           <div className="max-w-6xl mx-auto grid gap-12 md:grid-cols-4 text-[#2f1b0c]">
             {[{
               icon: "/icons/fine-rare.png",
-              title: "Fine & Rare",
-              text: "Over 14 years of sourcing rare whisky casks has taught us the importance of independent validation and transparency."
+              title: "Alternative Investment",
+              text: "Whisky Has Never Been More Valuable. We help you protect and grow your investment."
             }, {
               icon: "/icons/hands-off.png",
               title: "Truly Hands-Off",
-              text: "You retain full ownership. We provide registry access and authentication tools — no broker strings attached."
+              text: "You retain full ownership. We provide registry access and authentication tools - no commission and no strings attached."
             }, {
               icon: "/icons/high-performance.png",
               title: "Third-Party Valuation",
-              text: "Our valuations are neutral, data-driven, and broker-agnostic. You get fair, market-informed insight."
+              text: "Our valuations are completely neutral, data-driven, and broker-agnostic. You get fair, market-informed insight."
             }, {
               icon: "/icons/financially-minded.png",
               title: "Built for Investors",
-              text: "This registry exists to empower investors, not intermediaries. We protect your whisky like an asset, not a product."
+              text: "We aim to empower investors, not intermediaries. We protect your whisky like an asset, not a product."
             }].map((item, index) => (
               <div key={item.title} className="flex flex-col items-center opacity-0 animate-fade-in animation-delay" style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards' }}>
                 <img src={item.icon} alt={item.title} className="h-40 w-auto mb-4" />
@@ -367,6 +333,7 @@ export default function Home() {
               name="email"
               required
               placeholder="you@example.com"
+              suppressHydrationWarning
               className="p-3 rounded w-full text-black"
             />
             <button
@@ -398,6 +365,7 @@ export default function Home() {
             Verify a Cask
           </Link>
         </section>
+        The value of your investment may go down as well as up and you may get back less than the amount you invested. Past performance is not a reliable indicator of future performance. You should seek your own independent professional advice as to the suitability of any investment or service and the risks involved before you enter into any transaction.
       </main>
       <Footer />
     </>

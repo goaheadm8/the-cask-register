@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import React from 'react';
 
 export default function Navbar() {
   return (
@@ -15,7 +16,7 @@ export default function Navbar() {
             height={40}
             className="rounded"
           />
-          <span className="text-2xl font-serif font-extrabold tracking-wider">The Cask Register</span>
+          <span className="text-2xl font-serif font-extrabold tracking-wider">The Cask Registry</span>
         </Link>
         <div className="space-x-4">
           <Link href="/" className="hover:underline">Home</Link>
