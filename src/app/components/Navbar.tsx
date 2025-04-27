@@ -29,18 +29,19 @@ export default function Navbar() {
       const { data, error } = await supabase.auth.getSession();
       if (error) {
         console.error('Error fetching session:', error);
-        setUser(null);
+        setUser(() => null);
         return;
       }
-
-      if (typeof data?.session?.user === 'object' && data.session.user !== null) {
-        setUser(data.session.user);
+    
+      setUser(() => data?.session?.user ?? null);
+    
+      if (data?.session?.user?.id) {
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
           .eq('id', data.session.user.id)
           .single();
-
+    
         if (profileError) {
           console.error('Error fetching profile:', profileError);
           setRole(null);
@@ -48,7 +49,6 @@ export default function Navbar() {
         }
         setRole(profileData?.role ?? null);
       } else {
-        setUser(null);
         setRole(null);
       }
     };
