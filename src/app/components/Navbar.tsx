@@ -26,19 +26,23 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error('Error fetching session:', sessionError);
+      const { data, error } = await supabase.auth.getSession();
+      if (error) {
+        console.error('Error fetching session:', error);
         setUser(null);
         return;
       }
 
-      if (session?.user) {
-        setUser(session.user);
+      const sessionData = data?.session;
+      const currentUser: User | null = sessionData?.user ?? null;
+
+      setUser(currentUser);
+
+      if (currentUser?.id) {
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', session.user.id)
+          .eq('id', currentUser.id)
           .single();
 
         if (profileError) {
@@ -48,8 +52,7 @@ export default function Navbar() {
         }
         setRole(profileData?.role ?? null);
       } else {
-        setUser(null);
-        setRole(null); // Also ensure role is reset on logout
+        setRole(null);
       }
     };
     fetchUser();
