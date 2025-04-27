@@ -11,7 +11,7 @@ import { User, Session } from '@supabase/supabase-js';
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState<Session['user'] | null>(null);
+  const [user, setUser] = useState<User | null>(null);  // ✅ Correct here
   const [role, setRole] = useState(null);
   const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
