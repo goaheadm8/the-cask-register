@@ -26,22 +26,30 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching user:', error);
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error('Error fetching session:', sessionError);
         setUser(null);
         return;
       }
-      if (data?.user) {
-        setUser(data.user); // TypeScript now knows 'user' can be User
-        const { data: profileData } = await supabase
+
+      if (session?.user) {
+        setUser(session.user);
+        const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', data.user.id)
+          .eq('id', session.user.id)
           .single();
+
+        if (profileError) {
+          console.error('Error fetching profile:', profileError);
+          setRole(null);
+          return;
+        }
         setRole(profileData?.role ?? null);
       } else {
-        setUser(null); // TypeScript knows 'null' is also acceptable
+        setUser(null);
+        setRole(null); // Also ensure role is reset on logout
       }
     };
     fetchUser();
