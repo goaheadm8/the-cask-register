@@ -33,16 +33,12 @@ export default function Navbar() {
         return;
       }
 
-      const sessionData = data?.session;
-      const currentUser: User | null = sessionData?.user ?? null;
-
-      setUser(currentUser);
-
-      if (currentUser?.id) {
+      if (typeof data?.session?.user === 'object' && data.session.user !== null) {
+        setUser(data.session.user);
         const { data: profileData, error: profileError } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', currentUser.id)
+          .eq('id', data.session.user.id)
           .single();
 
         if (profileError) {
@@ -52,6 +48,7 @@ export default function Navbar() {
         }
         setRole(profileData?.role ?? null);
       } else {
+        setUser(null);
         setRole(null);
       }
     };
