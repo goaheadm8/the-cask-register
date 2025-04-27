@@ -26,19 +26,26 @@ export default function Navbar() {
 
   useEffect(() => {
     const fetchUser = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user as User ?? null); // ✅ Cast to User explicitly
-      if (session?.user?.id) {
-        const { data } = await supabase
+      const { data, error } = await supabase.auth.getUser();
+      if (error) {
+        console.error('Error fetching user:', error);
+        setUser(null);
+        return;
+      }
+      if (data?.user) {
+        setUser(data.user); // TypeScript now knows 'user' can be User
+        const { data: profileData } = await supabase
           .from('profiles')
           .select('role')
-          .eq('id', session.user.id)
+          .eq('id', data.user.id)
           .single();
-        setRole(data?.role ?? null);
+        setRole(profileData?.role ?? null);
+      } else {
+        setUser(null); // TypeScript knows 'null' is also acceptable
       }
     };
     fetchUser();
-
+    ;
     const handleClickOutside = (event: MouseEvent) => {
       if (partnersRef.current && !partnersRef.current.contains(event.target as Node)) {
         setPartnersDropdownOpen(false);
