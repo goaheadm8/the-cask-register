@@ -37,11 +37,11 @@ export default function Navbar() {
     fetchUser();
 
     // Handle clicks outside dropdowns
-    const handleClickOutside = (event) => {
-      if (partnersRef.current && !partnersRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (partnersRef.current && !partnersRef.current.contains(event.target as Node)) {
         setPartnersDropdownOpen(false);
       }
-      if (accountRef.current && !accountRef.current.contains(event.target)) {
+      if (accountRef.current && !accountRef.current.contains(event.target as Node)) {
         setAccountDropdownOpen(false);
       }
     };
