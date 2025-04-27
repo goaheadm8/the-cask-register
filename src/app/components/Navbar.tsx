@@ -5,17 +5,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { supabase } from "../../lib/supabaseClient";
-import { User, Session } from '@supabase/supabase-js';
-
+import { User } from '@supabase/supabase-js'; // ✅ Import only User
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState<User | null>(null);  // ✅ Correct here
-  const [role, setRole] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
+  const [role, setRole] = useState<string | null>(null); // ✅ Role typed properly
   const [partnersDropdownOpen, setPartnersDropdownOpen] = useState(false);
   const [accountDropdownOpen, setAccountDropdownOpen] = useState(false);
-  
+
   const partnersRef = useRef<HTMLDivElement>(null);
   const accountRef = useRef<HTMLDivElement>(null);
 
@@ -28,15 +27,18 @@ export default function Navbar() {
   useEffect(() => {
     const fetchUser = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      setUser(session?.user ?? null);
+      setUser(session?.user as User ?? null); // ✅ Cast to User explicitly
       if (session?.user?.id) {
-        const { data } = await supabase.from('profiles').select('role').eq('id', session.user.id).single();
+        const { data } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', session.user.id)
+          .single();
         setRole(data?.role ?? null);
       }
     };
     fetchUser();
 
-    // Handle clicks outside dropdowns
     const handleClickOutside = (event: MouseEvent) => {
       if (partnersRef.current && !partnersRef.current.contains(event.target as Node)) {
         setPartnersDropdownOpen(false);
@@ -90,10 +92,9 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-6 text-sm font-medium">
           <Link href="/">Home</Link>
           <Link href="/how-it-works">How It Works</Link>
-          
-          {/* Partners dropdown with click handling */}
+
           <div className="relative" ref={partnersRef}>
-            <button 
+            <button
               onClick={() => setPartnersDropdownOpen(!partnersDropdownOpen)}
               onMouseEnter={() => setPartnersDropdownOpen(true)}
               className="flex items-center focus:outline-none"
@@ -101,7 +102,7 @@ export default function Navbar() {
               Partners <ChevronDown className="ml-1 w-4 h-4" />
             </button>
             {partnersDropdownOpen && (
-              <div 
+              <div
                 className="absolute bg-white text-black shadow-md mt-2 py-2 rounded-md w-48 z-10"
                 onMouseLeave={() => setTimeout(() => setPartnersDropdownOpen(false), 300)}
               >
@@ -111,15 +112,14 @@ export default function Navbar() {
               </div>
             )}
           </div>
-          
+
           <Link href="/technology">Technology</Link>
 
           {user ? (
             <>
               {roleCTA()}
-              {/* Account dropdown with click handling */}
               <div className="relative" ref={accountRef}>
-                <button 
+                <button
                   onClick={() => setAccountDropdownOpen(!accountDropdownOpen)}
                   onMouseEnter={() => setAccountDropdownOpen(true)}
                   className="flex items-center focus:outline-none"
@@ -127,7 +127,7 @@ export default function Navbar() {
                   My Account <ChevronDown className="ml-1 w-4 h-4" />
                 </button>
                 {accountDropdownOpen && (
-                  <div 
+                  <div
                     className="absolute bg-white text-black shadow-md mt-2 py-2 rounded-md w-40 z-10 right-0"
                     onMouseLeave={() => setTimeout(() => setAccountDropdownOpen(false), 300)}
                   >
@@ -147,13 +147,11 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile toggle */}
         <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden">
           {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
-      {/* Mobile Dropdown */}
       {mobileMenuOpen && (
         <div className="md:hidden mt-5 space-y-5 text-sm font-medium px-4 pb-5">
           <Link href="/" className="block py-1">Home</Link>
