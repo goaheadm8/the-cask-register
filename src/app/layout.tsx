@@ -3,8 +3,8 @@ import "./globals.css";
 import React from "react";
 
 export const metadata: Metadata = {
-  title: "The Cask Registry",
-  description: "Track and authenticate whisky casks with full ownership transparency.",
+  title: "CaskMark",
+  description: "Caskmark offers scalable, non-invasive standardisation, verification, and digital footprint for whisky casks.",
 };
 
 export default function RootLayout({
@@ -22,7 +22,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body className="bg-[#f8f3e9] text-[#2f1b0c] antialiased font-sans">
+        {children}
+      </body>
     </html>
   );
 }

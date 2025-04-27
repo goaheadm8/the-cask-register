@@ -1,371 +1,106 @@
-// Full homepage script combining all updated content (including waitlist, hero, steps, benefits, differentiation, comparison table, and call to action)
-
 'use client';
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
-import { supabase } from "../lib/supabaseClient";
+import React from 'react';
+import Link from 'next/link';
+import Navbar from './components/Navbar';
+import Footer from './components/Footer';
 
-export default function Home() {
-  const [waitlistCount, setWaitlistCount] = useState<number | null>(null);
-
-  useEffect(() => {
-    const fetchCount = async () => {
-      const { count, error } = await supabase
-        .from("Waitlist")
-        .select("*", { count: "exact", head: true });
-
-      if (!error && typeof count === "number") {
-        setWaitlistCount(count);
-      }
-    };
-
-    fetchCount();
-  }, []);
-
+export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="bg-[#f8f3e9] text-[#2f1b0c] font-sans">
-
-        {/* Hero Section  with Background Image*/}
-        <section
-  className="relative bg-cover bg-center text-white text-center py-24"
-  style={{
-    backgroundImage: "url('/images/Tech and Whisky.webp')",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  }}
->
-  <div className="bg-black/60 absolute inset-0 z-0" />
-  <div className="relative z-10 px-6">
-    <h1 className="text-5xl font-serif font-bold mb-6">Bringing Integrity to Whisky Cask Investment</h1>
-    <p className="text-lg max-w-2xl mx-auto mb-8">
-      The Cask Registry brings clarity, accountability, and regulation to an opaque industry — providing third-party, independent pricing and guidance for whisky cask investors.
-    </p>
-    <Link
-      href="/register"
-      className="bg-white text-[#2f1b0c] px-6 py-3 rounded-lg font-semibold hover:bg-[#f0e8dc]"
-    >
-      Verify a Cask
-    </Link>
-  </div>
-</section>
-
-        {/* Registry Steps */}
-        <section className="py-16 bg-[#f0e8dc]">
-          <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8 px-6 text-center">
-            {[{
-              title: "1. Verify Ownership",
-              desc: "Confirm your legal ownership of the cask. We provide tools to validate and timestamp that record."
-            }, {
-              title: "2. Authenticate",
-              desc: "We verify the distillery, fill date, and warehouse information, then anchor it to the blockchain."
-            }, {
-              title: "3. Monitor",
-              desc: "Access secure updates and track cask maturation, storage, and current valuation."
-            }, {
-              title: "4. Analyse Exit Strategy",
-              desc: "Leverage lifecycle insights and market trends to identify the optimal time to exit or bottle."
-            }].map((step) => (
-              <div key={step.title} className="bg-white p-6 rounded-xl shadow">
-                <h3 className="text-xl font-bold mb-2 font-serif">{step.title}</h3>
-                <p className="text-sm">{step.desc}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Benefits Section */}
-        <section className="bg-white py-20 px-6 text-center">
-          <p className="text-sm uppercase tracking-widest text-gray-500 mb-2">Grow Your Returns</p>
-          <h2 className="text-4xl font-serif font-bold mb-12">Your Independent Whisky Partner</h2>
-
-          <div className="max-w-6xl mx-auto grid gap-12 md:grid-cols-4 text-[#2f1b0c]">
-            {[{
-              icon: "/icons/fine-rare.png",
-              title: "Alternative Investment",
-              text: "Whisky Has Never Been More Valuable. We help you protect and grow your investment."
-            }, {
-              icon: "/icons/hands-off.png",
-              title: "Truly Hands-Off",
-              text: "You retain full ownership. We provide registry access and authentication tools - no commission and no strings attached."
-            }, {
-              icon: "/icons/high-performance.png",
-              title: "Third-Party Valuation",
-              text: "Our valuations are completely neutral, data-driven, and broker-agnostic. You get fair, market-informed insight."
-            }, {
-              icon: "/icons/financially-minded.png",
-              title: "Built for Investors",
-              text: "We aim to empower investors, not intermediaries. We protect your whisky like an asset, not a product."
-            }].map((item, index) => (
-              <div key={item.title} className="flex flex-col items-center opacity-0 animate-fade-in animation-delay" style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards' }}>
-                <img src={item.icon} alt={item.title} className="h-40 w-auto mb-4" />
-                <h3 className="text-lg font-bold font-serif mb-2">{item.title}</h3>
-                <p className="text-sm text-gray-700">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* What Makes Us Different Section */}
-        <section className="bg-white py-20 px-6 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-12">What Makes Us Different</h2>
-          <div className="max-w-6xl mx-auto grid gap-12 md:grid-cols-3 text-left">
-            {[{
-              icon: "/icons/registry.png",
-              title: "We’re a Registry, Not a Seller",
-              text: "Our focus is to protect ownership records and verify authenticity, not push inventory or maximize commissions."
-            }, {
-              icon: "/icons/pricing.png",
-              title: "Independent Pricing",
-              text: "We provide transparent, third-party cask valuations — based on real data, not market hype."
-            }, {
-              icon: "/icons/investor-first.png",
-              title: "Investor-First Approach",
-              text: "You own the asset. We give you the tools to manage, track, and protect it without relying on brokers."
-            }].map((item, index) => (
-              <div key={item.title} className="bg-[#f8f3e9] p-6 rounded-xl shadow opacity-0 animate-fade-in" style={{ animationDelay: `${index * 150}ms`, animationFillMode: 'forwards' }}>
-                <img src={item.icon} alt={item.title} className="h-16 w-auto mb-4 mx-auto" />
-                <h3 className="text-xl font-bold font-serif mb-2">{item.title}</h3>
-                <p className="text-sm text-[#2f1b0c]">{item.text}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-
-                {/* Compare Us Table */}
-        <section className="py-20 bg-[#f0e8dc] px-6 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-12">How We Compare</h2>
-          <div className="overflow-x-auto">
-            <table className="w-full max-w-5xl mx-auto bg-white rounded-xl shadow overflow-hidden text-left text-sm md:text-base">
-              <thead className="bg-[#2f1b0c] text-white">
-                <tr>
-                  <th className="px-4 py-4">Feature</th>
-                  <th className="px-4 py-4 text-center">
-                    Traditional Broker
-                    <span
-                      title="Based on general market practices and broker models."
-                      className="ml-1 cursor-help inline-block"
-                    >ⓘ</span>
-                  </th>
-                  <th className="px-4 py-4 text-center">
-                    The Cask Registry
-                    <span
-                      title="Our neutral, independent approach."
-                      className="ml-1 cursor-help inline-block"
-                    >ⓘ</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="text-[#2f1b0c]">
-                {(() => {
-                  const rows = [
-                    {
-                      label: "Ownership",
-                      broker: "Often retained by broker, with vague title transfer timelines.",
-                      registry:
-                        "Ownership stays with the investor. We simply verify and record it on-chain for secure proof and future portability.",
-                      detail:
-                        "In traditional models, it's common for brokers to retain ownership or delay transfer, leaving investors exposed. We verify and timestamp ownership records on-chain for added proof."
-                    },
-                    {
-                      label: "Valuation",
-                      broker:
-                        "Prices are often speculative or inflated, with little explanation or data backing.",
-                      registry:
-                        "Lifecycle-based pricing grounded in actual market sales, distillery trends, and whisky maturity data.",
-                      detail:
-                        "Our valuation model accounts for distillery prestige, cask type, age, market history and future appreciation, instead of opaque broker claims."
-                    },
-                    {
-                      label: "Authentication",
-                      broker:
-                        "Paper or PDF certificates issued by distilleries or brokers, prone to duplication or forgery.",
-                      registry:
-                        "Blockchain-authenticated records — verified, timestamped, and tamper-proof.",
-                      detail:
-                        "All cask entries are validated by independent checks and registered immutably using blockchain tech, making them secure and queryable forever."
-                    },
-                    {
-                      label: "Motivation",
-                      broker:
-                        "Commission-based, often with hidden margins and incentives to upsell.",
-                      registry:
-                        "We provide neutral oversight to give whisky investment the global credibility enjoyed by fine wine or art.",
-                      detail:
-                        "The Cask Registry operates without sales incentives — our focus is building legitimacy in the whisky market through transparency."
-                    },
-                    {
-                      label: "Transparency",
-                      broker: "Limited disclosure and inconsistent reporting.",
-                      registry: "Full cask record, queryable anytime by ID.",
-                      detail:
-                        "Investors get a clear, viewable trail of distillery, fill date, warehouse, and ownership. No more relying on email PDFs."
-                    }
-                  ];
-
-                  const [isClient, setIsClient] = React.useState(false);
-                  React.useEffect(() => setIsClient(true), []);
-
-                  return rows.map((row, i) => {
-                    const [expanded, setExpanded] = React.useState(false);
-                    return (
-                      <React.Fragment key={i}>
-                        <tr
-                          className={`${
-                            i % 2 === 0 ? "bg-[#f8f3e9]" : "bg-white"
-                          } ${isClient ? "animate-fade-in" : ""}`}
-                          style={
-                            isClient
-                              ? {
-                                  animationDelay: `${i * 100}ms`,
-                                  animationFillMode: "forwards",
-                                  animationDuration: "0.6s",
-                                  animationTimingFunction: "ease-out"
-                                }
-                              : undefined
-                          }
-                        >
-                          <td className="px-4 py-4 font-semibold align-top w-1/4">
-                            {row.label}
-                            <button
-                              onClick={() => setExpanded(!expanded)}
-                              className="ml-2 text-sm underline text-[#6d4c3d]"
-                            >
-                              {expanded ? "Hide" : "Learn More"}
-                            </button>
-                          </td>
-                          <td className="px-4 py-4 text-center w-1/3">{row.broker}</td>
-                          <td className="px-4 py-4 text-center font-bold w-1/3">{row.registry}</td>
-                        </tr>
-                        {expanded && (
-                          <tr className="bg-[#fefcf9]">
-                            <td colSpan={3} className="px-6 py-4 text-sm text-left text-[#3b2a1d]">
-                              {row.detail}
-                            </td>
-                          </tr>
-                        )}
-                      </React.Fragment>
-                    );
-                  });
-                })()}
-              </tbody>
-            </table>
-          </div>
-        </section>)
-
-        {/* Testimonials Section */}
-        <section className="bg-white py-20 px-6 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-12">Trusted by Early Adopters</h2>
-          <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-3">
-            {[{
-              name: "Whisky Investor, UK",
-              quote: "The Cask Registry gave me peace of mind no broker ever could. Now I know what I own, where it is, and what it's worth."
-            }, {
-              name: "Distillery Owner, Speyside",
-              quote: "Having an independent registry helps ensure trust across the board — it’s a game-changer for the industry."
-            }, {
-              name: "Private Wealth Advisor",
-              quote: "It’s about time whisky had an equivalent of the land registry. This is long overdue."
-            }].map((testimonial, i) => (
-              <div key={i} className="bg-[#f8f3e9] p-6 rounded-xl shadow text-left">
-                <p className="italic mb-4 text-[#2f1b0c]">"{testimonial.quote}"</p>
-                <p className="font-bold text-sm text-[#6b4a36]">– {testimonial.name}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Image Carousel Section */}
-        <section className="bg-[#f8f3e9] py-16 px-6 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-8">Inside the Cask Journey</h2>
-          <div className="overflow-x-auto whitespace-nowrap flex gap-6 px-2 max-w-6xl mx-auto">
-            {["cask-1.jpg", "warehouse.jpg", "ownership.jpg", "blockchain.jpg"].map((img, i) => (
-              <div key={i} className="inline-block rounded-xl shadow w-72 h-48 overflow-hidden">
-                <img
-                  src={`/images/${img}`}
-                  alt="Whisky visual"
-                  className="object-cover w-full h-full"
-                />
-              </div>
-            ))}
-          </div>
-        </section>
-
-        {/* Blog/Newsletter Tease */}
-        <section className="bg-white py-20 px-6 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-6">Stay Informed</h2>
-          <p className="mb-8 max-w-xl mx-auto text-gray-700">
-            Get insights, updates, and whisky investment tips in your inbox.
-
-            {waitlistCount !== null && (
-            <p className="text-base text-4xl font-serif font-bold mb-6 animate-count">
-              <strong className="text-2xl font-semibold">{waitlistCount + 143}</strong> people have already joined the waitlist!
-            </p>
-          )}  
+      <main className="bg-white text-black">
+        {/* Hero Section */}
+        <section className="text-center px-6 py-24">
+          <h1 className="text-5xl font-serif font-bold mb-6">
+            The mark of whisky provenance.
+          </h1>
+          <p className="text-lg mb-6 max-w-2xl mx-auto">
+            Caskmark is the secure registry for whisky cask ownership, custody, and valuation.
           </p>
-          <form
-            onSubmit={async (e) => {
-              e.preventDefault();
-              const form = e.currentTarget;
-              const email = form.email.value;
-
-              // Insert email into the Waitlist table in Supabase
-              const { data, error } = await supabase.from("Waitlist").insert([{ email }]);
-
-              if (error) {
-                alert("Something went wrong. Please try again.");
-              } else {
-                alert("Thank you for subscribing to the newsletter!");
-                form.reset();
-              }
-            }}
-            className="flex flex-col md:flex-row gap-4 justify-center items-center max-w-md mx-auto"
-            
-          >
-            <input
-              type="email"
-              name="email"
-              required
-              placeholder="you@example.com"
-              suppressHydrationWarning
-              className="p-3 rounded w-full text-black"
-            />
-            <button
-              type="submit"
-              className="bg-[#2f1b0c] text-white px-6 py-3 rounded hover:bg-[#442c1c]"
-            >
-              Subscribe
-            </button>
-          </form>
-        </section>
-
-        {/* Sticky CTA Button */}
-        <div className="fixed bottom-6 right-6 z-50">
-          <Link
-            href="/register"
-            className="bg-[#2f1b0c] text-white px-5 py-3 rounded-full shadow-lg hover:bg-[#442c1c] transition"
-          >
-             Verify a Cask
-          </Link>
-        </div>
-
-        {/* Call to Action */}
-        <section className="bg-[#2f1b0c] text-white py-20 text-center">
-          <h2 className="text-4xl font-serif font-bold mb-6">Not a Broker. A Registry.</h2>
-          <p className="mb-6">
-            Register your whisky cask and join the movement toward accountability and secure ownership.
+          <p className="text-md mb-10 text-gray-700">
+            Built for brokers, trusted by warehouses, and verified for investors.
           </p>
-          <Link href="/register" className="bg-white text-[#2f1b0c] px-6 py-3 rounded-lg font-semibold hover:bg-[#f0e8dc]">
-            Verify a Cask
-          </Link>
+          <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <Link href="/technology" className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800">Explore the Registry</Link>
+            <Link href="/get-access" className="border border-black px-6 py-3 rounded hover:bg-gray-100">Partner With Us</Link>
+          </div>
         </section>
-        The value of your investment may go down as well as up and you may get back less than the amount you invested. Past performance is not a reliable indicator of future performance. You should seek your own independent professional advice as to the suitability of any investment or service and the risks involved before you enter into any transaction.
+
+        {/* What is Caskmark */}
+        <section className="bg-gray-100 py-16 px-6 text-center">
+          <h2 className="text-3xl font-serif font-bold mb-4">What is Caskmark?</h2>
+          <p className="max-w-3xl mx-auto text-gray-800">
+            We provide the data backbone for verifying, documenting, and transferring whisky cask ownership.
+            Every record is signed, time-stamped, and cryptographically anchored — so your cask can speak for itself.
+          </p>
+        </section>
+
+        {/* Who It's For */}
+        <section className="py-20 px-6 bg-white text-center">
+          <h2 className="text-3xl font-serif font-bold mb-10">Who It’s For</h2>
+          <div className="max-w-6xl mx-auto grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: 'Brokers',
+                desc: 'Prove ownership. Simplify resale. Gain trust.'
+              },
+              {
+                title: 'Warehouses',
+                desc: 'Create secure custody logs. Reduce liability.'
+              },
+              {
+                title: 'Collectors',
+                desc: 'View and protect your investment.'
+              },
+            ].map(({ title, desc }) => (
+              <div key={title} className="bg-gray-100 p-6 rounded-xl shadow">
+                <h3 className="text-xl font-bold font-serif mb-2">{title}</h3>
+                <p className="text-gray-700">{desc}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Metrics Section */}
+        <section className="bg-gray-50 py-20 px-6 text-center">
+          <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { label: 'Casks Verified', value: '3,482' },
+              { label: 'Partners Onboarded', value: '19' },
+              { label: 'Appraised Value', value: '£14.2M' }
+            ].map(({ label, value }) => (
+              <div key={label} className="text-center">
+                <p className="text-4xl font-bold font-serif mb-2">{value}</p>
+                <p className="text-gray-600">{label}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Testimonial */}
+        <section className="py-20 bg-white px-6 text-center">
+          <blockquote className="italic text-lg max-w-2xl mx-auto text-gray-800">
+            “Caskmark gives us a level of transparency this industry has never had.”<br />
+            <span className="block mt-4 font-bold text-gray-700">— Partner Broker</span>
+          </blockquote>
+        </section>
+
+        {/* Final Call to Action */}
+        <section className="bg-[#f8f3e9] py-20 px-6 text-center">
+          <h2 className="text-3xl font-serif font-bold mb-4">
+            Still using spreadsheets and PDFs?
+          </h2>
+          <p className="mb-6 text-gray-800">Let’s fix that.</p>
+          <div className="flex flex-col md:flex-row gap-4 justify-center">
+            <Link href="/get-access" className="bg-black text-white px-6 py-3 rounded hover:bg-gray-800">
+              Get Started
+            </Link>
+            <Link href="/get-access" className="border border-black px-6 py-3 rounded hover:bg-gray-100">
+              Book a Call with Us
+            </Link>
+          </div>
+        </section>
       </main>
       <Footer />
     </>
