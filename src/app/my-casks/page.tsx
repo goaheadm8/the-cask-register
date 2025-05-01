@@ -1,20 +1,32 @@
 'use client';
 
-import React from 'react';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabaseClient';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
-import { User } from '@supabase/supabase-js';
-
 
 export default function MyCasksPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [casks, setCasks] = useState<any[]>([]);
   const [user, setUser] = useState<any>(null);
+  const [filters, setFilters] = useState({
+    status: '',
+    distillery: '',
+    caskType: '',
+    search: ''
+  });
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilters(prev => ({ ...prev, [name]: value }));
+  };
+
+  const clearFilters = () => {
+    setFilters({ status: '', distillery: '', caskType: '', search: '' });
+  };
 
   useEffect(() => {
     const fetchCasks = async () => {
@@ -25,7 +37,6 @@ export default function MyCasksPage() {
       }
       setUser(session.user);
 
-      // Fetch user role
       const { data: profile } = await supabase
         .from('profiles')
         .select('role')
@@ -39,9 +50,9 @@ export default function MyCasksPage() {
       }
 
       let column = '';
-      if (profile.role === 'broker') column = 'broker_id';
+      if (['collector', 'admin'].includes(profile.role)) column = 'owner_id';
+      else if (profile.role === 'broker') column = 'broker_id';
       else if (profile.role === 'warehouse') column = 'warehouse_id';
-      else if (profile.role === 'collector') column = 'owner_id';
       else if (profile.role === 'distillery') column = 'distillery_id';
 
       if (!column) {
@@ -50,22 +61,56 @@ export default function MyCasksPage() {
         return;
       }
 
-      const { data, error } = await supabase
-        .from('casks')
-        .select('*')
+      const { data: ownerships, error: ownershipError } = await supabase
+        .from('cask_ownership')
+        .select(`cask_id, owner_id, broker_id, warehouse_id, distillery_id, 
+                 casks!cask_ownership_cask_id_fkey(id, distillery, cask_identifier, cask_type, fill_date, current_status),
+                 brokers(name), warehouses(name)`) 
         .eq(column, session.user.id);
 
-      if (error) {
-        console.error('Error fetching casks:', error);
-      } else {
-        setCasks(data || []);
+      if (ownershipError) {
+        console.error('Error fetching casks:', ownershipError);
+        setLoading(false);
+        return;
       }
 
+      const caskIds = ownerships.map(o => o.cask_id);
+
+      const { data: valuations, error: valuationsError } = await supabase
+        .from('cask_valuations')
+        .select('cask_id, valuation_amount')
+        .in('cask_id', caskIds)
+        .order('valuation_date', { ascending: false });
+
+      if (valuationsError) {
+        console.error('Error fetching valuations:', valuationsError);
+        setLoading(false);
+        return;
+      }
+
+      const enriched = ownerships.map(o => {
+        const valuation = valuations.find(v => v.cask_id === o.cask_id);
+        return {
+          ...o,
+          valuation: valuation?.valuation_amount || 0
+        };
+      });
+
+      setCasks(enriched);
       setLoading(false);
     };
 
     fetchCasks();
   }, [router]);
+
+  const filteredCasks = casks.filter(c => {
+    return (
+      (filters.status === '' || c.casks?.current_status === filters.status) &&
+      (filters.distillery === '' || c.casks?.distillery?.toLowerCase().includes(filters.distillery.toLowerCase())) &&
+      (filters.caskType === '' || c.casks?.cask_type?.toLowerCase().includes(filters.caskType.toLowerCase())) &&
+      (filters.search === '' || c.casks?.cask_identifier?.toLowerCase().includes(filters.search.toLowerCase()))
+    );
+  });
 
   if (loading) return <p className="text-center pt-32">Loading casks...</p>;
 
@@ -80,21 +125,41 @@ export default function MyCasksPage() {
           </Link>
         </div>
 
-        {casks.length === 0 ? (
+        <div className="mb-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <select name="status" value={filters.status} onChange={handleFilterChange} className="border rounded p-2">
+            <option value="">All Statuses</option>
+            <option value="in_storage">In Storage</option>
+            <option value="for_sale">For Sale</option>
+            <option value="verified">Verified</option>
+          </select>
+          <input type="text" name="distillery" value={filters.distillery} onChange={handleFilterChange} placeholder="Filter by Distillery" className="border rounded p-2" />
+          <input type="text" name="caskType" value={filters.caskType} onChange={handleFilterChange} placeholder="Filter by Cask Type" className="border rounded p-2" />
+          <input type="text" name="search" value={filters.search} onChange={handleFilterChange} placeholder="Search Cask ID" className="border rounded p-2" />
+          <button onClick={clearFilters} className="border p-2 rounded bg-gray-100 hover:bg-gray-200">Clear Filters</button>
+        </div>
+
+        {filteredCasks.length === 0 ? (
           <p className="text-center text-gray-500">You don't have any casks registered yet.</p>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {casks.map((cask) => (
-              <div key={cask.id} className="border rounded-lg p-6 bg-white shadow hover:shadow-lg transition-all hover:scale-[1.01]">
-                <h2 className="text-xl font-semibold mb-1">{cask.distillery_name || 'Unknown Distillery'}</h2>
-                <p className="text-sm text-gray-600 mb-2">Cask #: {cask.cask_number || 'N/A'}</p>
-                <StatusBadge status={cask.status || 'unknown'} />
-                <Link
-                  href={`/casks/${cask.id}`}
-                  className="inline-block mt-4 text-sm text-[#2f1b0c] hover:underline"
-                >
-                  View Details →
-                </Link>
+            {filteredCasks.map((ownership) => (
+              <div key={ownership.cask_id} className="flex border rounded-lg p-4 bg-white shadow hover:shadow-lg transition-all hover:scale-[1.01]">
+                <div className="flex-1 pr-4">
+                  <h2 className="text-xl font-semibold mb-1">{ownership.casks?.distillery || 'Unknown Distillery'}</h2>
+                  <p className="text-sm text-gray-600">Cask ID: {ownership.casks?.cask_identifier || 'N/A'}</p>
+                  <p className="text-sm text-gray-600">Cask Type: {ownership.casks?.cask_type || 'N/A'}</p>
+                  <p className="text-sm text-gray-600">Warehouse: {ownership.warehouses?.name || 'N/A'}</p>
+                  <p className="text-sm text-gray-500">Broker: {ownership.brokers?.name || 'N/A'}</p>
+                  <p className="text-sm text-gray-600">Year: {ownership.casks?.fill_date ? new Date(ownership.casks.fill_date).getFullYear() : 'N/A'}</p>
+                  <p className="text-sm text-gray-600">Est. Valuation: £{ownership.valuation.toLocaleString()}</p>
+                  <StatusBadge status={ownership.casks?.current_status || 'unknown'} />
+                  <Link href={`/casks/${ownership.cask_id}`} className="inline-block mt-4 text-sm text-[#2f1b0c] hover:underline">
+                    View Details →
+                  </Link>
+                </div>
+                <div className="w-32 flex-shrink-0">
+                  <img src="/images/whisky-cask-generic2.png" alt="Whisky Cask" className="w-full h-auto object-contain" />
+                </div>
               </div>
             ))}
           </div>
@@ -112,7 +177,7 @@ function StatusBadge({ status }: { status: string }) {
   if (status === 'verified') color = 'bg-green-100 text-green-800';
 
   return (
-    <span className={`inline-block px-3 py-1 text-xs font-semibold rounded-full ${color}`}>
+    <span className={`inline-block mt-2 px-3 py-1 text-xs font-semibold rounded-full ${color}`}>
       {status.replace('_', ' ').toUpperCase()}
     </span>
   );

@@ -1,5 +1,6 @@
-import Navbar from "@/app/components/Navbar";
-import Footer from "@/app/components/Footer";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
+import React from "react";
 
 export default function FAQPage() {
   return (

@@ -44,7 +44,7 @@ export default function Home() {
   <div className="relative z-10 px-6">
     <h1 className="text-5xl font-serif font-bold mb-6">Bringing Integrity to Whisky Cask Investment</h1>
     <p className="text-lg max-w-2xl mx-auto mb-8">
-      The Cask Registry brings clarity, accountability, and regulation to an opaque industry — providing third-party, independent pricing and guidance for whisky cask investors. An independent valuation means transparency - not commissions  
+      CaskMark brings clarity, accountability, and regulation to an opaque industry — providing third-party, independent pricing and guidance for whisky cask investors. An independent valuation means transparency - not commissions  
     </p>
     <Link
       href="/register"
@@ -118,7 +118,7 @@ export default function Home() {
             {[{
               icon: "/icons/registry.png",
               title: "A Registry, Not a Seller",
-              text: "The Cask Registry aim is to protect ownership records and verify authenticity, not push inventory or maximize commissions."
+              text: "CaskMark's aim is to protect ownership records and verify authenticity, not push inventory or maximize commissions."
             }, {
               icon: "/icons/pricing.png",
               title: "Independent Pricing",
@@ -154,7 +154,7 @@ export default function Home() {
                     >ⓘ</span>
                   </th>
                   <th className="px-4 py-4 text-center">
-                    The Cask Registry
+                    CaskMark
                     <span
                       title="Our neutral, independent approach."
                       className="ml-1 cursor-help inline-block"
@@ -171,7 +171,7 @@ export default function Home() {
                       registry:
                         "Ownership stays with the investor. We simply verify and record it on-chain for secure proof and future portability.",
                       detail:
-                        "In traditional models, it's common for brokers to retain ownership or delay transfer, leaving investors exposed. We verify and timestamp ownership records on-chain for added proof. We don't hold your cask — you do."
+                        "In traditional models, it's common for brokers to retain ownership or delay transfer, leaving investors exposed. We verify and timestamp ownership records on-chain for added proof. We don't hold your cask - you do."
                     },
                     {
                       label: "Valuation",
@@ -180,7 +180,7 @@ export default function Home() {
                       registry:
                         "Lifecycle-based pricing grounded in actual market sales, distillery trends, and whisky maturity data.",
                       detail:
-                        "Our valuation model accounts for distillery prestige, cask type, age, market history and future appreciation, instead of opaque broker claims using tiny sample sizes to justify advertising outlandish claims on returns. Don't let a broker tell you what your cask is worth — let the data do the talking."
+                        "Our valuation model accounts for distillery prestige, cask type, age, market history and future appreciation, instead of opaque broker claims often using one sale to justify advertising outlandish claims on returns. Don't let a broker tell you what your cask is worth — let the data do the talking."
                     },
                     {
                       label: "Authentication",
@@ -189,7 +189,7 @@ export default function Home() {
                       registry:
                         "Blockchain-authenticated records — verified, timestamped, and tamper-proof.",
                       detail:
-                        "All cask entries are validated by independent checks and registered immutably using blockchain tech, making them secure and queryable forever."
+                        "All cask entries are validated by independent checks and registered immutably using blockchain technology, making them secure and queryable forever. We aim to build the the full history for a cask from distillery to investor, and beyond."
                     },
                     {
                       label: "Motivation",
@@ -198,7 +198,7 @@ export default function Home() {
                       registry:
                         "We provide neutral oversight to give whisky investment the global credibility enjoyed by fine wine or art.",
                       detail:
-                        "The Cask Registry operates without sales incentives — our focus is building legitimacy in the whisky market through transparency."
+                        "CaskMark operates without sales incentives — our focus is building legitimacy in the whisky market through transparency."
                     },
                     {
                       label: "Transparency",
@@ -265,7 +265,7 @@ export default function Home() {
           <div className="max-w-6xl mx-auto grid gap-8 md:grid-cols-3">
             {[{
               name: "Whisky Investor, UK",
-              quote: "The Cask Registry gave me peace of mind no broker ever could. Now I know what I own, where it is, and what it's worth."
+              quote: "CaskMark gave me peace of mind no broker ever could. Now I know what I own, where it is, and what it's worth."
             }, {
               name: "Distillery Owner, Speyside",
               quote: "Having an independent registry helps ensure trust across the board — it’s a game-changer for the industry."

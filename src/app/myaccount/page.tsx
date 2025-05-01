@@ -37,7 +37,7 @@ export default function DashboardPage() {
         {/* Casks Section */}
         <h2 className="text-xl font-semibold mb-4 mt-8">My Casks</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            <Card title="Register Cask" href="/submit-cask" desc="Submit a new cask for verification." />
+            <Card title="Register Cask" href="/register-cask" desc="Submit a new cask for verification." />
           <Card title="View and Manage" href="/my-casks" desc="View casks you've verified." />
           <Card title="Submit Event" href="/submit-event" desc="Log purchase/sale or changes in cask status." />
           <Card title="Verification Requests" href="/verifications" desc="Track casks you've requested verification for." />

@@ -44,7 +44,7 @@ export default function CaskLifecycle() {
         <ArrowUpDown className="block mx-auto my-6 h-14 w-14 text-[#2f1b0c]" />  
       {/* Cask Registry Block */}
       <div className="bg-white text-[#2f1b0c] mt-12 p-6 rounded-xl shadow w-full max-w-xs mx-auto text-center">
-        <h3 className="text-xl font-bold font-serif mb-2">The Role of The Cask Registry</h3>
+        <h3 className="text-xl font-bold font-serif mb-2">The Role of CaskMark</h3>
         <ul className="text-sm text-left list-disc pl-4">
           <li>Independent Ownership Verification</li>
           <li>Blockchain Authentication</li>
