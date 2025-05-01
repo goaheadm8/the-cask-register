@@ -26,7 +26,13 @@ export default function RoleRequestsPage() {
         .eq('status', 'pending')
         .order('created_at', { ascending: false });
 
-      if (!error) setRequests(data);
+      if (!error) {
+        const formattedData = data.map(req => ({
+          ...req,
+          profiles: req.profiles[0], // Extract the first profile object
+        }));
+        setRequests(formattedData);
+      }
       setLoading(false);
     };
 
