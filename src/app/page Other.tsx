@@ -89,7 +89,7 @@ export default function HomePage() {
         {/* Final Call to Action */}
         <section className="bg-[#f8f3e9] py-20 px-6 text-center">
           <h2 className="text-3xl font-serif font-bold mb-4">
-            Still using spreadsheets and PDFs?
+            Still using spreadsheets and PDFs?npm run
           </h2>
           <p className="mb-6 text-gray-800">Let’s fix that.</p>
           <div className="flex flex-col md:flex-row gap-4 justify-center">

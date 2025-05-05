@@ -9,7 +9,7 @@ export default function TechnologyPage() {
   return (
     <>
       <Navbar />
-      <main className="bg-white text-black pt-28 px-6 pb-20">
+      <main className="text-black pt-28 px-6 pb-20">
         <h1 className="text-4xl font-serif font-bold mb-10 text-center">Technology</h1>
 
         <section className="mb-16 max-w-4xl mx-auto">

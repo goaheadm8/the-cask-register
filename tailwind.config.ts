@@ -1,16 +1,16 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-  content: [
-    "./src/**/*.{js,ts,jsx,tsx}",
-  ],
+  content: ["./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
-      rotate: {
-        '180': '180deg',
+      colors: {
+        background: '#ffffff',
+        foreground: '#1a1a1a',
       },
     },
   },
+  
   plugins: [],
 }
 
